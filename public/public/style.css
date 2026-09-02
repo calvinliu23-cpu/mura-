@@ -1,0 +1,164 @@
+/* ============ 共用基礎 ============ */
+:root {
+  --team-a: #3b82f6;   /* 藍：男方 */
+  --team-b: #ec4899;   /* 粉：女方 */
+  --gold: #fbbf24;
+  --bg-dark: #0f172a;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", -apple-system, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+/* ============ 大螢幕：跑道 ============ */
+.track-wrap {
+  position: relative;
+  width: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+  background: repeating-linear-gradient(
+    180deg,
+    #4ade80 0px, #4ade80 10px,
+    #22c55e 10px, #22c55e 20px
+  );
+  border: 6px solid #78350f;
+}
+
+.track-lane {
+  position: relative;
+  height: 46%;
+  background: repeating-linear-gradient(90deg, #64748b 0 60px, #475569 60px 64px);
+  border-bottom: 4px dashed #fde68a;
+}
+.track-lane:last-child { border-bottom: none; }
+
+.finish-flag {
+  position: absolute;
+  right: 2%;
+  top: 0;
+  bottom: 0;
+  width: 10px;
+  background: repeating-linear-gradient(45deg, #000 0 10px, #fff 10px 20px);
+  z-index: 5;
+}
+
+.kart {
+  position: absolute;
+  top: 50%;
+  transform: translate(-10%, -50%);
+  transition: left 100ms linear;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 10;
+  will-change: left;
+}
+
+.kart-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 4px solid white;
+  object-fit: cover;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,.35);
+}
+
+.kart-body {
+  font-size: 46px;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,.4));
+  animation: bob 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes bob {
+  from { transform: translateY(0); }
+  to { transform: translateY(-6px); }
+}
+
+.smoke {
+  position: absolute;
+  left: -18px;
+  top: 60%;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.6);
+  animation: smokeOut 0.6s ease-out infinite;
+}
+@keyframes smokeOut {
+  0% { opacity: .8; transform: scale(0.4) translateX(0); }
+  100% { opacity: 0; transform: scale(1.4) translateX(-20px); }
+}
+
+/* ============ 手機端：點擊按鈕 ============ */
+.tap-button {
+  touch-action: manipulation;
+  user-select: none;
+  transition: transform 60ms ease-out, box-shadow 60ms ease-out;
+}
+.tap-button:active,
+.tap-button.tapped {
+  transform: scale(0.9);
+}
+
+.float-plus {
+  position: absolute;
+  pointer-events: none;
+  font-weight: 900;
+  font-size: 28px;
+  color: #fde047;
+  text-shadow: 0 2px 6px rgba(0,0,0,.5);
+  animation: floatUp 700ms ease-out forwards;
+}
+@keyframes floatUp {
+  0% { opacity: 1; transform: translate(-50%, 0) scale(0.8); }
+  30% { transform: translate(-50%, -20px) scale(1.2); }
+  100% { opacity: 0; transform: translate(-50%, -90px) scale(1); }
+}
+
+/* ============ 倒數動畫 ============ */
+.countdown-number {
+  animation: countPop 1s ease-in-out;
+}
+@keyframes countPop {
+  0% { transform: scale(2.5); opacity: 0; }
+  30% { transform: scale(1); opacity: 1; }
+  80% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(0.6); opacity: 0; }
+}
+
+/* ============ 彩帶 ============ */
+.confetti-piece {
+  position: fixed;
+  top: -20px;
+  width: 10px;
+  height: 16px;
+  opacity: 0.95;
+  z-index: 200;
+  animation-name: confettiFall;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+@keyframes confettiFall {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(110vh) rotate(720deg); }
+}
+
+/* ============ 通用淡入 ============ */
+.fade-in { animation: fadeIn 0.4s ease-out; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.pulse-glow {
+  animation: pulseGlow 1.6s ease-in-out infinite;
+}
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(251,191,36,.6); }
+  50% { box-shadow: 0 0 0 20px rgba(251,191,36,0); }
+}
