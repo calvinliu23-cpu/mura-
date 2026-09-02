@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>婚禮賽車大戰 🏎️</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="/css/style.css" />
+<style>
+  html, body { height: 100%; overscroll-behavior: none; }
+  body { background: linear-gradient(160deg,#1e293b,#0f172a); }
+</style>
+</head>
+<body class="min-h-screen text-white flex flex-col">
+
+  <!-- 畫面 1：登入 / 選隊 -->
+  <div id="screen-join" class="flex-1 flex flex-col items-center justify-center px-6 fade-in">
+    <div class="text-5xl mb-2">🏎️💨</div>
+    <h1 class="text-2xl font-black mb-1 text-center">婚禮現場互動賽車大戰</h1>
+    <p class="text-slate-400 text-sm mb-8">加入戰隊，狂點手機幫隊伍衝第一！</p>
+
+    <div class="w-full max-w-sm space-y-4">
+      <div>
+        <label class="text-sm text-slate-300 mb-1 block">你的暱稱</label>
+        <input id="nicknameInput" maxlength="12" placeholder="例如：新郎表弟阿翔"
+          class="w-full rounded-xl px-4 py-3 bg-slate-800 border border-slate-600 focus:border-yellow-400 outline-none text-lg" />
+      </div>
+
+      <div>
+        <label class="text-sm text-slate-300 mb-1 block">選擇你的隊伍</label>
+        <div class="grid grid-cols-2 gap-3">
+          <button type="button" id="teamA-btn" class="team-choice-btn rounded-2xl p-4 border-2 border-blue-500 bg-blue-500/10 text-center">
+            <div id="teamA-avatar" class="w-14 h-14 mx-auto rounded-full bg-blue-500 flex items-center justify-center text-2xl mb-2 overflow-hidden">🤵</div>
+            <div id="teamA-name" class="font-bold">男方親友隊</div>
+            <div id="teamA-count" class="text-xs text-slate-400 mt-1">0 人已加入</div>
+          </button>
+          <button type="button" id="teamB-btn" class="team-choice-btn rounded-2xl p-4 border-2 border-pink-500 bg-pink-500/10 text-center">
+            <div id="teamB-avatar" class="w-14 h-14 mx-auto rounded-full bg-pink-500 flex items-center justify-center text-2xl mb-2 overflow-hidden">👰</div>
+            <div id="teamB-name" class="font-bold">女方親友隊</div>
+            <div id="teamB-count" class="text-xs text-slate-400 mt-1">0 人已加入</div>
+          </button>
+        </div>
+      </div>
+
+      <button id="joinBtn" disabled
+        class="w-full py-4 rounded-2xl bg-slate-600 text-slate-300 font-black text-lg transition">
+        請先選擇隊伍
+      </button>
+      <p id="joinError" class="text-red-400 text-sm text-center hidden"></p>
+    </div>
+  </div>
+
+  <!-- 畫面 2：等待開賽 -->
+  <div id="screen-waiting" class="hidden flex-1 flex flex-col items-center justify-center px-6 fade-in text-center">
+    <div id="waitingCard" class="rounded-3xl p-8 w-full max-w-sm border-2 pulse-glow">
+      <div id="waitingAvatar" class="w-20 h-20 mx-auto rounded-full flex items-center justify-center text-4xl mb-3 overflow-hidden"></div>
+      <div class="text-sm text-slate-300">你是</div>
+      <div id="waitingNickname" class="text-xl font-black mb-1"></div>
+      <div id="waitingTeam" class="text-lg font-bold mb-6"></div>
+      <div class="animate-pulse text-yellow-300 font-bold">🎤 等待主持人開賽...</div>
+    </div>
+  </div>
+
+  <!-- 畫面 3：倒數 -->
+  <div id="screen-countdown" class="hidden fixed inset-0 flex items-center justify-center bg-black/80 z-50">
+    <div id="countdownDisplay" class="countdown-number text-9xl font-black text-yellow-300">3</div>
+  </div>
+
+  <!-- 畫面 4：遊戲進行 -->
+  <div id="screen-game" class="hidden flex-1 flex flex-col relative overflow-hidden">
+    <div class="flex justify-between items-center px-5 pt-4 pb-2 text-sm">
+      <div>
+        <div class="text-slate-400">個人點擊</div>
+        <div id="myClicks" class="text-2xl font-black text-yellow-300">0</div>
+      </div>
+      <div id="gameTimer" class="text-3xl font-black text-white">90</div>
+      <div class="text-right">
+        <div class="text-slate-400">隊伍總分</div>
+        <div id="teamClicks" class="text-2xl font-black">0</div>
+      </div>
+    </div>
+
+    <div class="flex-1 flex items-center justify-center relative px-8">
+      <button id="tapButton" class="tap-button w-full max-w-xs aspect-square rounded-full font-black text-3xl text-white shadow-2xl relative">
+        用力點我！
+      </button>
+    </div>
+    <p class="text-center text-slate-400 text-xs pb-4">狂點螢幕幫隊伍加速衝刺 🔥</p>
+  </div>
+
+  <!-- 畫面 5：結束 -->
+  <div id="screen-end" class="hidden flex-1 flex flex-col items-center justify-center px-6 fade-in text-center">
+    <div class="text-5xl mb-3">🏁</div>
+    <h2 class="text-2xl font-black mb-4">比賽結束！</h2>
+    <div class="rounded-3xl p-6 w-full max-w-sm bg-slate-800 border border-slate-600 mb-4">
+      <div class="text-slate-400 text-sm">你的最終點擊數</div>
+      <div id="finalMyClicks" class="text-4xl font-black text-yellow-300">0</div>
+    </div>
+    <p class="text-slate-400 text-sm">請抬頭看大螢幕，結果即將揭曉 🎉</p>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/mobile.js"></script>
+</body>
+</html>

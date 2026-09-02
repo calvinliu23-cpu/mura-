@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>婚禮賽車大戰 - 大螢幕</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="/css/style.css" />
+<style>
+  html, body { height: 100%; }
+  body { background: radial-gradient(ellipse at center, #1e293b 0%, #0f172a 70%); overflow: hidden; }
+</style>
+</head>
+<body class="min-h-screen text-white flex flex-col items-center justify-center p-8 relative">
+
+  <!-- 階段 1：等待加入 / QR -->
+  <div id="stage-waiting" class="flex flex-col items-center text-center fade-in">
+    <h1 class="text-6xl font-black mb-2">💍 婚禮現場互動賽車大戰 🏎️</h1>
+    <p class="text-2xl text-slate-300 mb-10">掃描 QR Code，加入你的戰隊！</p>
+
+    <div class="flex items-center gap-16">
+      <div class="text-center">
+        <img id="qrImage" src="" alt="QR Code" class="w-64 h-64 bg-white rounded-2xl p-3" />
+        <p class="mt-3 text-slate-400 text-lg">或輸入網址：<span id="joinUrl" class="text-yellow-300"></span></p>
+      </div>
+
+      <div class="flex gap-10">
+        <div class="text-center">
+          <div id="waitAvatarA" class="w-24 h-24 rounded-full bg-blue-500 mx-auto mb-2 flex items-center justify-center text-4xl overflow-hidden border-4 border-blue-300">🤵</div>
+          <div id="waitNameA" class="text-xl font-bold text-blue-300">男方親友隊</div>
+          <div id="waitCountA" class="text-4xl font-black">0</div>
+          <div class="text-slate-400 text-sm">人已加入</div>
+        </div>
+        <div class="text-4xl self-center font-black text-yellow-400">VS</div>
+        <div class="text-center">
+          <div id="waitAvatarB" class="w-24 h-24 rounded-full bg-pink-500 mx-auto mb-2 flex items-center justify-center text-4xl overflow-hidden border-4 border-pink-300">👰</div>
+          <div id="waitNameB" class="text-xl font-bold text-pink-300">女方親友隊</div>
+          <div id="waitCountB" class="text-4xl font-black">0</div>
+          <div class="text-slate-400 text-sm">人已加入</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 階段 2：倒數 -->
+  <div id="stage-countdown" class="hidden fixed inset-0 flex items-center justify-center bg-black/70 z-50">
+    <div id="bigCountdown" class="countdown-number text-[280px] font-black text-yellow-300 leading-none"></div>
+  </div>
+
+  <!-- 階段 3：比賽中 -->
+  <div id="stage-racing" class="hidden w-full max-w-6xl fade-in">
+    <div class="flex justify-between items-end mb-4 px-2">
+      <div class="text-left">
+        <div id="raceNameA" class="text-2xl font-black text-blue-300">男方親友隊</div>
+        <div id="raceClicksA" class="text-5xl font-black">0</div>
+      </div>
+      <div class="text-center">
+        <div class="text-slate-400 text-lg">剩餘時間</div>
+        <div id="raceTimer" class="text-7xl font-black text-yellow-300 tabular-nums">90</div>
+      </div>
+      <div class="text-right">
+        <div id="raceNameB" class="text-2xl font-black text-pink-300">女方親友隊</div>
+        <div id="raceClicksB" class="text-5xl font-black">0</div>
+      </div>
+    </div>
+
+    <div class="track-wrap" style="height: 320px;">
+      <div class="finish-flag"></div>
+      <div class="track-lane" id="laneA">
+        <div class="kart" id="kartA" style="left:2%;">
+          <div class="smoke"></div>
+          <img id="kartAvatarA" class="kart-avatar hidden" />
+          <div id="kartEmojiA" class="kart-body">🏎️</div>
+        </div>
+      </div>
+      <div class="track-lane" id="laneB">
+        <div class="kart" id="kartB" style="left:2%;">
+          <div class="smoke"></div>
+          <img id="kartAvatarB" class="kart-avatar hidden" />
+          <div id="kartEmojiB" class="kart-body">🏎️</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 階段 4：結算 -->
+  <div id="stage-finished" class="hidden flex flex-col items-center text-center fade-in relative z-10">
+    <div class="text-3xl font-black text-yellow-300 mb-2">🏆 比賽結束 🏆</div>
+    <div id="winnerName" class="text-7xl font-black mb-6"></div>
+    <div class="flex gap-16 mb-8">
+      <div class="text-center">
+        <div id="finalNameA" class="text-xl text-blue-300 font-bold"></div>
+        <div id="finalClicksA" class="text-5xl font-black"></div>
+      </div>
+      <div class="text-center">
+        <div id="finalNameB" class="text-xl text-pink-300 font-bold"></div>
+        <div id="finalClicksB" class="text-5xl font-black"></div>
+      </div>
+    </div>
+    <div class="bg-white/10 border-2 border-yellow-400 rounded-3xl px-12 py-6">
+      <div class="text-yellow-300 text-xl font-bold mb-1">👑 MVP 冠軍 👑</div>
+      <div id="mvpName" class="text-4xl font-black"></div>
+      <div id="mvpClicks" class="text-lg text-slate-300 mt-1"></div>
+    </div>
+  </div>
+
+  <div id="confettiLayer" class="fixed inset-0 pointer-events-none z-40"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/display.js"></script>
+</body>
+</html>
