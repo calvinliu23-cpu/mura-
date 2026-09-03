@@ -1,0 +1,15 @@
+/* 全局頁面基礎設定 */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  margin: 0;
+  padding: 20px;
+}
+
+/* 印章去背與半透明控制 */
+.transparent-stamp {
+  max-width: 200px;
+  height: auto;
+  opacity: 0.85; /* 透明度：0.1 至 1.0 */
+  mix-blend-mode: multiply; /* 消除邊界白底 */
+}
